@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#0d1a17" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>Lost in the Mist · 迷雾拾荒者</title>
+  <link rel="stylesheet" href="./src/styles.css" />
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <div id="ui">
+    <!-- 主菜单 -->
+    <section id="menu" class="screen">
+      <div class="menu-inner">
+        <p class="menu-kicker">一个关于迷雾与微光的故事</p>
+        <h1 class="title"><span class="title-en">Lost in the Mist</span><span class="title-cn">迷雾拾荒者</span></h1>
+        <div class="menu-buttons">
+          <button class="btn btn-primary" data-action="new">开始新的旅程</button>
+          <button class="btn" data-action="continue" id="btn-continue">继续游戏</button>
+          <button class="btn" data-action="howto">操作说明</button>
+          <button class="btn" data-action="settings">设置</button>
+        </div>
+        <p class="menu-foot">v1.0 · 自动存档于本机浏览器</p>
+      </div>
+    </section>
+
+    <!-- 操作说明 -->
+    <section id="howto" class="screen modal hidden">
+      <div class="card">
+        <h2>操作说明</h2>
+        <div class="howto-grid">
+          <div><kbd>W A S D</kbd> / <kbd>方向键</kbd></div><div>移动</div>
+          <div><kbd>E</kbd> / <kbd>空格</kbd></div><div>采集、互动</div>
+          <div><kbd>B</kbd> / <kbd>Tab</kbd></div><div>行囊（背包与制作）</div>
+          <div><kbd>Q</kbd></div><div>使用雾露药水</div>
+          <div><kbd>M</kbd></div><div>展开地图</div>
+          <div><kbd>Esc</kbd> / <kbd>P</kbd></div><div>暂停</div>
+          <div><kbd>Shift</kbd></div><div>慢步</div>
+        </div>
+        <p class="muted">手机：左下拖动摇杆移动，右下按钮采集/互动，右上打开行囊与暂停。</p>
+        <p class="muted">目标：拾取森林里的材料，点亮灯笼驱散迷雾，制作月光符文，唤醒北方的森林祭坛。</p>
+        <button class="btn btn-primary" data-action="close-howto">知道了</button>
+      </div>
+    </section>
+
+    <!-- HUD -->
+    <section id="hud" class="hidden">
+      <div id="quest" class="hud-card">
+        <div class="quest-label">当前任务</div>
+        <div id="quest-title" class="quest-title"></div>
+        <div id="quest-desc" class="quest-desc"></div>
+        <ul id="quest-goals" class="quest-goals"></ul>
+      </div>
+      <div id="hud-buttons">
+        <button class="icon-btn" data-action="bag" title="行囊 (B)"><span class="ico ico-bag"></span><span class="lbl">行囊</span></button>
+        <button class="icon-btn" data-action="map" title="地图 (M)"><span class="ico ico-map"></span><span class="lbl">地图</span></button>
+        <button class="icon-btn" data-action="pause" title="暂停 (Esc)"><span class="ico ico-pause"></span><span class="lbl">暂停</span></button>
+      </div>
+      <canvas id="minimap" width="160" height="120"></canvas>
+      <div id="hotbar"></div>
+      <div id="buff" class="hidden"></div>
+      <div id="prompt" class="hidden"></div>
+      <div id="gather-bar" class="hidden"><div id="gather-fill"></div></div>
+      <div id="save-indicator">已存档</div>
+    </section>
+
+    <div id="toasts"></div>
+
+    <!-- 触屏控件 -->
+    <section id="touch" class="hidden">
+      <div id="stick-zone"><div id="stick-base"><div id="stick-knob"></div></div></div>
+      <button id="touch-act" class="touch-btn">采集</button>
+      <button id="touch-potion" class="touch-btn small" title="雾露药水">药</button>
+    </section>
+
+    <!-- 行囊：背包 + 制作 -->
+    <section id="bag" class="screen modal hidden">
+      <div class="card wide">
+        <div class="card-head">
+          <h2>行囊</h2>
+          <button class="close" data-action="close-bag" aria-label="关闭">×</button>
+        </div>
+        <div class="bag-cols">
+          <div class="bag-col">
+            <h3>背包</h3>
+            <div id="inv-grid" class="inv-grid"></div>
+            <div id="inv-detail" class="inv-detail muted">选择一件物品查看说明</div>
+          </div>
+          <div class="bag-col">
+            <h3>制作</h3>
+            <div id="recipes" class="recipes"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 地图 -->
+    <section id="bigmap" class="screen modal hidden">
+      <div class="card wide map-card">
+        <div class="card-head">
+          <h2>森林地图 <span id="explore-pct" class="muted small"></span></h2>
+          <button class="close" data-action="close-map" aria-label="关闭">×</button>
+        </div>
+        <canvas id="bigmap-canvas" width="576" height="432"></canvas>
+      </div>
+    </section>
+
+    <!-- 暂停 -->
+    <section id="pause" class="screen modal hidden">
+      <div class="card">
+        <h2>暂停</h2>
+        <div class="menu-buttons">
+          <button class="btn btn-primary" data-action="resume">继续</button>
+          <button class="btn" data-action="settings">设置</button>
+          <button class="btn" data-action="howto">操作说明</button>
+          <button class="btn" data-action="to-menu">保存并返回主菜单</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 设置 -->
+    <section id="settings" class="screen modal hidden">
+      <div class="card">
+        <h2>设置</h2>
+        <label class="row">主音量 <input type="range" min="0" max="100" id="set-master" /></label>
+        <label class="row">音乐 <input type="range" min="0" max="100" id="set-music" /></label>
+        <label class="row">音效 <input type="range" min="0" max="100" id="set-sfx" /></label>
+        <label class="row">触屏控件
+          <select id="set-touch">
+            <option value="auto">自动</option>
+            <option value="on">始终显示</option>
+            <option value="off">隐藏</option>
+          </select>
+        </label>
+        <label class="row">迷雾粒子
+          <select id="set-fx">
+            <option value="high">高</option>
+            <option value="low">低（省电）</option>
+          </select>
+        </label>
+        <div class="menu-buttons">
+          <button class="btn" data-action="reset-save" id="btn-reset">清除存档</button>
+          <button class="btn btn-primary" data-action="close-settings">完成</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 确认对话框 -->
+    <section id="confirm" class="screen modal hidden">
+      <div class="card">
+        <h2 id="confirm-title">确认</h2>
+        <p id="confirm-text"></p>
+        <div class="menu-buttons row-buttons">
+          <button class="btn" data-action="confirm-no">取消</button>
+          <button class="btn btn-primary" data-action="confirm-yes">确定</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 结局 -->
+    <section id="ending" class="screen hidden">
+      <div class="ending-inner">
+        <p class="menu-kicker">终章</p>
+        <h1 class="ending-title">迷雾散去</h1>
+        <div id="ending-text" class="ending-text"></div>
+        <div id="ending-stats" class="ending-stats"></div>
+        <div class="menu-buttons row-buttons">
+          <button class="btn" data-action="free-roam">继续漫步森林</button>
+          <button class="btn btn-primary" data-action="to-menu">返回主菜单</button>
+        </div>
+      </div>
+    </section>
+
+    <div id="fade"></div>
+  </div>
+
+  <script type="module" src="./src/main.ts"></script>
+</body>
+</html>
