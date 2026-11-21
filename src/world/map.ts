@@ -1,6 +1,7 @@
 // 森林地图生成（固定种子，确定性 —— 存档只需保存动态状态）
 import { mulberry32, Noise2D, clamp } from '../engine/math';
-import type { ResourceKind } from '../game/data';
+import type { NodeType } from '../data/world';
+export type ResourceKind = NodeType;
 
 export const TILE = 32;
 export const MAP_W = 96;
@@ -20,6 +21,7 @@ export interface WorldObj {
   variant: number;
   res?: ResourceKind;
   stele?: number;
+  fixed?: boolean; // 边界树：不可砍伐
 }
 
 export interface WorldMap {
@@ -162,7 +164,7 @@ export function generateMap(): WorldMap {
     if (rnd() < want && !occupied[idx(Math.max(0, x - 1), y)] && !occupied[idx(x, Math.max(0, y - 1))]) {
       const pine = zone[i] === 2 || (rnd() < 0.28 && zone[i] !== 1);
       const variant = Math.floor(rnd() * 4);
-      place(pine ? 'pine' : 'tree', x, y, zone[i] === 1 ? variant % 2 + 4 : variant, true);
+      place(pine ? 'pine' : 'tree', x, y, zone[i] === 1 ? variant % 2 + 4 : variant, true, edge < 4 ? { fixed: true } : {});
     }
   }
   // 边界兜底：最外两圈全部阻挡（视觉上由树覆盖）
@@ -250,6 +252,15 @@ export function generateMap(): WorldMap {
     }
     if (best) place('stele', best.x, best.y, k % 2, true, { stele: k });
   });
+
+  // ---- v2 生存版新增资源（追加在随机序列末尾，不改变原有地形与物件位置）----
+  scatter(candidates((x, y) => Math.hypot(x - start.x, y - start.y) < 12), 7, 2.2, res('grass'));
+  scatter(candidates((x, y) => Math.hypot(x - start.x, y - start.y) < 12), 6, 2.2, res('sapling'));
+  scatter(candidates((x, y) => Math.hypot(x - start.x, y - start.y) < 10), 5, 2.5, res('flint'));
+  scatter(candidates((_x, _y, i) => zone[i] === 0 || zone[i] === 3), 70, 3, res('grass'));
+  scatter(candidates((_x, _y, i) => zone[i] === 0 || zone[i] === 1), 45, 3.5, res('sapling'));
+  scatter(candidates((_x, _y, i) => zone[i] === 2), 22, 2.5, res('flint'));
+  scatter(candidates((_x, _y, i) => zone[i] === 0), 16, 6, res('flint'));
 
   return {
     ground, blocked, moisture, waterDepth, objects, zone, noise,

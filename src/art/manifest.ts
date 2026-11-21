@@ -9,6 +9,11 @@ import {
   paintTree, paintPine, paintRock, paintBush, paintResource, paintStele,
   paintAltarBase, paintAltarMonolith, paintPlayer, paintIcon, paintMistPuff, type Cnv, type Dir,
 } from './painters';
+import {
+  paintStump, paintRubble, paintBerryBush, paintGrassTuft, paintSapling, paintFlint,
+  paintCampfireBase, paintChest, paintRabbit, paintWolf, paintIcon2,
+} from './painters2';
+import { ITEMS } from '../data/items';
 
 /** 例：'tree.0': 'assets/tree_0.png' */
 export const IMAGE_OVERRIDES: Record<string, string> = {};
@@ -46,11 +51,32 @@ export class Assets {
     this.set('altar.mono.lit', paintAltarMonolith(3, true));
     const dirs: Dir[] = ['down', 'up', 'side'];
     for (const d of dirs) for (let f = 0; f < 6; f++) this.set(`player.${d}.${f}`, paintPlayer(d, f));
-    for (const id of ['wood', 'glowcap', 'moonstone', 'mistdew', 'lantern', 'pick', 'tonic', 'rune']) {
-      const c = paintIcon(id);
+    // 物品图标：优先使用 v2 绘制函数，否则沿用 v1 图标（log←wood，pickaxe←pick）
+    const legacy: Record<string, string> = { log: 'wood', pickaxe: 'pick' };
+    for (const id of Object.keys(ITEMS)) {
+      const c = paintIcon2(id) ?? paintIcon(legacy[id] ?? id);
       this.set(`icon.${id}`, c);
       this.icons.set(id, c.toDataURL());
     }
+    // v2 新增世界物件
+    this.set('stump.tree', paintStump(false));
+    this.set('stump.pine', paintStump(true));
+    this.set('rubble', paintRubble());
+    for (let v = 0; v < 3; v++) {
+      this.set(`berry.${v}`, paintBerryBush(v, true));
+      this.set(`berry.${v}.empty`, paintBerryBush(v, false));
+      this.set(`res.grass.${v}`, paintGrassTuft(v, false));
+      this.set(`res.grass.${v}.empty`, paintGrassTuft(v, true));
+      this.set(`res.sapling.${v}`, paintSapling(v, false));
+      this.set(`res.sapling.${v}.empty`, paintSapling(v, true));
+      this.set(`res.flint.${v}`, paintFlint(v));
+      this.set(`res.flint.${v}.empty`, paintFlint(v)); // 不会被绘制（已拾取的燧石隐藏）
+    }
+    this.set('campfire', paintCampfireBase());
+    this.set('chest', paintChest(false));
+    this.set('chest.open', paintChest(true));
+    for (let f = 0; f < 5; f++) this.set(`rabbit.${f}`, paintRabbit(f));
+    for (let f = 0; f < 6; f++) this.set(`wolf.${f}`, paintWolf(f));
     for (let i = 0; i < 4; i++) this.set(`mist.${i}`, paintMistPuff(i));
   }
 

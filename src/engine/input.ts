@@ -8,6 +8,8 @@ export class Input {
   actionHeld = false;
   private actionTap = false;
   potionTap = false;
+  private attackTap = false;
+  attackHeld = false;
   touchUsed = false;
   enabled = true;
 
@@ -32,6 +34,17 @@ export class Input {
     return t;
   }
   tapAction() { this.actionTap = true; }
+  tapAttack() { this.attackTap = true; }
+  consumeAttack(): boolean {
+    const t = this.attackTap || (this.enabled && this.wasPressed('f', 'j'));
+    this.attackTap = false;
+    return t || (this.enabled && (this.isDown('f', 'j') || this.attackHeld));
+  }
+  bindAttack(btn: HTMLElement) {
+    btn.addEventListener('pointerdown', (e) => { e.preventDefault(); this.attackHeld = true; this.tapAttack(); });
+    const up = () => { this.attackHeld = false; };
+    btn.addEventListener('pointerup', up); btn.addEventListener('pointercancel', up); btn.addEventListener('pointerleave', up);
+  }
   endFrame() { this.pressed.clear(); this.potionTap = false; }
 
   /** 移动向量（已归一化） */

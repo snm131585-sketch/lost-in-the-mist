@@ -3,7 +3,8 @@
 
 export type Sfx =
   | 'step' | 'pickup' | 'gather' | 'craft' | 'quest' | 'click' | 'error'
-  | 'open' | 'close' | 'altar' | 'potion' | 'discover' | 'rustle';
+  | 'open' | 'close' | 'altar' | 'potion' | 'discover' | 'rustle'
+  | 'chop' | 'mine' | 'hurt' | 'swing' | 'hit' | 'eat' | 'fire' | 'build' | 'howl' | 'death' | 'whisper' | 'break';
 
 export class AudioEngine {
   ctx: AudioContext | null = null;
@@ -133,6 +134,18 @@ export class AudioEngine {
       case 'error': this.tone(196, t, 0.2, { type: 'square', gain: 0.04 }); this.tone(185, t + 0.1, 0.22, { type: 'square', gain: 0.04 }); break;
       case 'potion': [660, 880, 990, 1320].forEach((f, i) => this.tone(f, t + i * 0.04, 0.5, { type: 'sine', gain: 0.07, glide: 1.06 })); this.noise(t, 0.4, 900, 3, 0.05); break;
       case 'discover': [440, 554, 659, 880].forEach((f, i) => this.tone(f, t + i * 0.15, 2, { type: 'sine', gain: 0.08, attack: 0.08 })); break;
+      case 'chop': this.noise(t, 0.08, 900, 3, 0.22); this.tone(140, t, 0.12, { type: 'triangle', gain: 0.14, glide: 0.7 }); break;
+      case 'mine': this.tone(1800 + Math.random() * 300, t, 0.18, { type: 'triangle', gain: 0.08 }); this.noise(t, 0.06, 3500, 2, 0.16); break;
+      case 'hurt': this.tone(260, t, 0.25, { type: 'sawtooth', gain: 0.07, glide: 0.5 }); this.noise(t, 0.15, 700, 1, 0.12); break;
+      case 'swing': this.noise(t, 0.14, 2200, 0.7, 0.08); break;
+      case 'hit': this.noise(t, 0.08, 500, 1.5, 0.25); this.tone(110, t, 0.1, { type: 'square', gain: 0.06, glide: 0.6 }); break;
+      case 'eat': [0, 0.1, 0.2].forEach((d) => this.noise(t + d, 0.06, 1200, 2, 0.12)); break;
+      case 'fire': this.noise(t, 0.6, 1500, 0.5, 0.06); this.tone(180, t, 0.4, { type: 'sine', gain: 0.05, glide: 1.8 }); break;
+      case 'build': [0, 0.12, 0.24].forEach((d) => { this.noise(t + d, 0.07, 700, 2, 0.2); }); this.tone(392, t + 0.3, 0.4, { type: 'triangle', gain: 0.06 }); break;
+      case 'howl': this.tone(330, t, 2.2, { type: 'sine', gain: 0.07, attack: 0.4, glide: 1.45 }); this.tone(332, t + 0.05, 2.2, { type: 'triangle', gain: 0.025, attack: 0.5, glide: 1.4 }); break;
+      case 'death': [392, 330, 262, 196].forEach((f, i) => this.tone(f, t + i * 0.35, 1.6, { type: 'sine', gain: 0.1, attack: 0.05 })); break;
+      case 'whisper': this.noise(t, 1.2, 3200, 4, 0.05); this.noise(t + 0.3, 1, 1800, 6, 0.04); break;
+      case 'break': this.noise(t, 0.2, 1200, 1, 0.18); this.tone(300, t, 0.2, { type: 'square', gain: 0.04, glide: 0.5 }); break;
       case 'altar': {
         [196, 247, 294, 392, 494, 587].forEach((f, i) => this.tone(f, t + i * 0.25, 4.5, { type: 'sine', gain: 0.1, attack: 0.6 }));
         this.noise(t, 3, 500, 0.5, 0.05, 'lowpass');
@@ -183,6 +196,19 @@ export class AudioEngine {
         this.tone(fq, t + 0.6 + Math.random() * 3, 2.4, { type: 'sine', gain: 0.035, attack: 0.01, bus: this.musicBus });
       }
     }
+  }
+
+  private rainGain: GainNode | null = null;
+  setRain(level: number) {
+    const ctx = this.ctx;
+    if (!ctx) return;
+    if (!this.rainGain) {
+      const s = ctx.createBufferSource(); s.buffer = this.noiseBuf; s.loop = true;
+      const f = ctx.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = 1200;
+      this.rainGain = ctx.createGain(); this.rainGain.gain.value = 0;
+      s.connect(f); f.connect(this.rainGain); this.rainGain.connect(this.sfxBus); s.start();
+    }
+    this.rainGain.gain.setTargetAtTime(level * 0.09, ctx.currentTime, 0.5);
   }
 
   stopAll() {

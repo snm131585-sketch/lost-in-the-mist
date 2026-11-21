@@ -23,7 +23,7 @@
           <button class="btn" data-action="howto">操作说明</button>
           <button class="btn" data-action="settings">设置</button>
         </div>
-        <p class="menu-foot">v1.0 · 自动存档于本机浏览器</p>
+        <p class="menu-foot" id="menu-foot">v2.0 生存版 · 自动存档于本机浏览器</p>
       </div>
     </section>
 
@@ -34,14 +34,17 @@
         <div class="howto-grid">
           <div><kbd>W A S D</kbd> / <kbd>方向键</kbd></div><div>移动</div>
           <div><kbd>E</kbd> / <kbd>空格</kbd></div><div>采集、互动</div>
-          <div><kbd>B</kbd> / <kbd>Tab</kbd></div><div>行囊（背包与制作）</div>
+          <div><kbd>F</kbd> / 鼠标左键</div><div>攻击</div>
+          <div><kbd>1</kbd>–<kbd>0</kbd> / 点击物品栏</div><div>使用：吃东西、装备工具、放置建筑</div>
+          <div><kbd>C</kbd> / <kbd>Tab</kbd></div><div>制作</div>
           <div><kbd>Q</kbd></div><div>使用雾露药水</div>
           <div><kbd>M</kbd></div><div>展开地图</div>
           <div><kbd>Esc</kbd> / <kbd>P</kbd></div><div>暂停</div>
           <div><kbd>Shift</kbd></div><div>慢步</div>
         </div>
-        <p class="muted">手机：左下拖动摇杆移动，右下按钮采集/互动，右上打开行囊与暂停。</p>
-        <p class="muted">目标：拾取森林里的材料，点亮灯笼驱散迷雾，制作月光符文，唤醒北方的森林祭坛。</p>
+        <p class="muted">手机：左下拖动摇杆移动，右下「互动」「攻击」按钮，点物品栏使用物品。</p>
+        <p class="muted"><b>生存</b>：留意生命、饥饿、精神、体温。夜晚没有光会被黑暗吞噬——天黑前一定要有篝火或火把。死亡后存档会被清除，世界重新开始。</p>
+        <p class="muted"><b>长线目标</b>：制作月光符文，唤醒北方的森林祭坛，驱散迷雾。</p>
         <button class="btn btn-primary" data-action="close-howto">知道了</button>
       </div>
     </section>
@@ -49,22 +52,42 @@
     <!-- HUD -->
     <section id="hud" class="hidden">
       <div id="quest" class="hud-card">
-        <div class="quest-label">当前任务</div>
+        <div class="quest-label">旅程</div>
         <div id="quest-title" class="quest-title"></div>
         <div id="quest-desc" class="quest-desc"></div>
         <ul id="quest-goals" class="quest-goals"></ul>
       </div>
-      <div id="hud-buttons">
-        <button class="icon-btn" data-action="bag" title="行囊 (B)"><span class="ico ico-bag"></span><span class="lbl">行囊</span></button>
-        <button class="icon-btn" data-action="map" title="地图 (M)"><span class="ico ico-map"></span><span class="lbl">地图</span></button>
-        <button class="icon-btn" data-action="pause" title="暂停 (Esc)"><span class="ico ico-pause"></span><span class="lbl">暂停</span></button>
+      <div id="hud-right">
+        <div id="hud-buttons">
+          <button class="icon-btn" data-action="bag" title="制作 (C)"><span class="ico ico-bag"></span><span class="lbl">制作</span></button>
+          <button class="icon-btn" data-action="map" title="地图 (M)"><span class="ico ico-map"></span><span class="lbl">地图</span></button>
+          <button class="icon-btn" data-action="pause" title="暂停 (Esc)"><span class="ico ico-pause"></span><span class="lbl">暂停</span></button>
+        </div>
+        <div id="stats">
+          <div class="clock" title="时间"><canvas id="clock" width="112" height="112"></canvas><span id="clock-day">第 1 天</span></div>
+          <div class="gauge" id="g-hp" title="生命"><i class="gi gi-hp"></i><b></b></div>
+          <div class="gauge" id="g-hunger" title="饥饿"><i class="gi gi-hunger"></i><b></b></div>
+          <div class="gauge" id="g-sanity" title="精神"><i class="gi gi-sanity"></i><b></b></div>
+          <div class="gauge" id="g-temp" title="体温"><i class="gi gi-temp"></i><b></b></div>
+        </div>
+        <canvas id="minimap" width="160" height="120"></canvas>
       </div>
-      <canvas id="minimap" width="160" height="120"></canvas>
-      <div id="hotbar"></div>
+      <div id="bottom-bar">
+        <div id="hotbar"></div>
+        <div id="equip">
+          <div class="eq" id="eq-hand" title="手持"><span class="eq-lbl">手</span></div>
+          <div class="eq" id="eq-body" title="身体"><span class="eq-lbl">身</span></div>
+        </div>
+      </div>
       <div id="buff" class="hidden"></div>
       <div id="prompt" class="hidden"></div>
       <div id="gather-bar" class="hidden"><div id="gather-fill"></div></div>
       <div id="save-indicator">已存档</div>
+      <div id="build-bar" class="hidden">
+        <span id="build-msg"></span>
+        <button class="btn btn-primary" id="build-ok">放置</button>
+        <button class="btn" id="build-cancel">取消</button>
+      </div>
     </section>
 
     <div id="toasts"></div>
@@ -72,28 +95,31 @@
     <!-- 触屏控件 -->
     <section id="touch" class="hidden">
       <div id="stick-zone"><div id="stick-base"><div id="stick-knob"></div></div></div>
-      <button id="touch-act" class="touch-btn">采集</button>
+      <button id="touch-act" class="touch-btn">互动</button>
+      <button id="touch-attack" class="touch-btn small">攻击</button>
       <button id="touch-potion" class="touch-btn small" title="雾露药水">药</button>
     </section>
 
-    <!-- 行囊：背包 + 制作 -->
     <section id="bag" class="screen modal hidden">
       <div class="card wide">
         <div class="card-head">
-          <h2>行囊</h2>
+          <h2>制作</h2>
           <button class="close" data-action="close-bag" aria-label="关闭">×</button>
         </div>
-        <div class="bag-cols">
-          <div class="bag-col">
-            <h3>背包</h3>
-            <div id="inv-grid" class="inv-grid"></div>
-            <div id="inv-detail" class="inv-detail muted">选择一件物品查看说明</div>
-          </div>
-          <div class="bag-col">
-            <h3>制作</h3>
-            <div id="recipes" class="recipes"></div>
-          </div>
+        <div id="craft-tabs" class="tabs"></div>
+        <div id="recipes" class="recipes"></div>
+        <div id="item-detail" class="inv-detail muted">点击下方物品栏可以吃东西、装备工具或放置建筑。</div>
+      </div>
+    </section>
+
+    <!-- 篝火 / 储物箱 -->
+    <section id="station" class="screen modal hidden">
+      <div class="card wide">
+        <div class="card-head">
+          <h2 id="station-title">篝火</h2>
+          <button class="close" data-action="close-station" aria-label="关闭">×</button>
         </div>
+        <div id="station-body"></div>
       </div>
     </section>
 
@@ -160,6 +186,22 @@
       </div>
     </section>
 
+    <!-- 死亡 -->
+    <section id="death" class="screen hidden">
+      <div class="ending-inner">
+        <p class="menu-kicker">旅程中断</p>
+        <h1 class="ending-title death-title">你倒下了</h1>
+        <p id="death-text" class="muted"></p>
+        <div id="death-stats" class="ending-stats"></div>
+        <div class="menu-buttons row-buttons">
+          <button class="btn" data-action="to-menu-dead">返回主菜单</button>
+          <button class="btn btn-primary" data-action="restart">重新开始</button>
+        </div>
+      </div>
+    </section>
+
+    <div id="fx-overlay"></div>
+
     <!-- 结局 -->
     <section id="ending" class="screen hidden">
       <div class="ending-inner">
@@ -168,7 +210,7 @@
         <div id="ending-text" class="ending-text"></div>
         <div id="ending-stats" class="ending-stats"></div>
         <div class="menu-buttons row-buttons">
-          <button class="btn" data-action="free-roam">继续漫步森林</button>
+          <button class="btn" data-action="free-roam">继续在森林中生存</button>
           <button class="btn btn-primary" data-action="to-menu">返回主菜单</button>
         </div>
       </div>
