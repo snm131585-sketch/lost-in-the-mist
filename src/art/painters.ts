@@ -378,10 +378,10 @@ export function paintAltarBase(): Cnv {
 
 /** 祭坛主体（方尖碑 + 三个符文基座），lit = 已唤醒 */
 export function paintAltarMonolith(sockets: number, lit: boolean): Cnv {
-  const [c, g] = makeCanvas(200, 170);
-  const cx = 100, by = 150;
+  const [c, g] = makeCanvas(200, 176);
+  const cx = 100, by = 146;
   // 三个基座：左、右、后
-  const pedestals = [{ x: cx - 62, y: by - 6 }, { x: cx + 62, y: by - 6 }, { x: cx, y: by - 52 }];
+  const pedestals = [{ x: cx - 64, y: by - 14 }, { x: cx + 64, y: by - 14 }, { x: cx, y: by + 12 }];
   const drawPed = (p: { x: number; y: number }, k: number) => {
     g.fillStyle = PAL.stone[0];
     g.beginPath(); g.ellipse(p.x, p.y, 15, 6, 0, 0, Math.PI * 2); g.fill();
@@ -401,7 +401,6 @@ export function paintAltarMonolith(sockets: number, lit: boolean): Cnv {
       g.beginPath(); g.ellipse(p.x, p.y - 26, 6, 2.5, 0, 0, Math.PI * 2); g.fill();
     }
   };
-  drawPed(pedestals[2], 2);
   // 方尖碑
   const gr = g.createLinearGradient(cx - 18, 0, cx + 18, 0);
   gr.addColorStop(0, PAL.stone[3]); gr.addColorStop(0.5, PAL.stone[2]); gr.addColorStop(1, PAL.stone[0]);
@@ -424,6 +423,7 @@ export function paintAltarMonolith(sockets: number, lit: boolean): Cnv {
   }
   drawPed(pedestals[0], 0);
   drawPed(pedestals[1], 1);
+  drawPed(pedestals[2], 2);
   return c;
 }
 

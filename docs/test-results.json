@@ -1,0 +1,230 @@
+{
+  "date": "2026-11-21T04:33:33.157Z",
+  "url": "file:///home/claude/lost-in-the-mist/dist/index.html",
+  "durationSec": 181,
+  "pass": 44,
+  "total": 44,
+  "results": [
+    {
+      "name": "游戏启动并显示主菜单",
+      "ok": true,
+      "detail": "1031 ms"
+    },
+    {
+      "name": "无存档时「继续游戏」禁用",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "所有资源点与石碑可从出生点步行到达",
+      "ok": true,
+      "detail": "92/92 "
+    },
+    {
+      "name": "森林祭坛可步行到达",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "操作说明可打开",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "设置写入 LocalStorage",
+      "ok": true,
+      "detail": "{\"master\":80,\"music\":30,\"sfx\":80,\"touch\":\"auto\",\"fx\":\"high\"}"
+    },
+    {
+      "name": "开始游戏进入 play 状态，HUD 显示",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "方向键移动角色",
+      "ok": true,
+      "detail": "Δy=-64.0"
+    },
+    {
+      "name": "摄像机跟随角色",
+      "ok": true,
+      "detail": "Δcam=-62.4"
+    },
+    {
+      "name": "碰撞：角色无法穿过树干",
+      "ok": true,
+      "detail": "{\"blocked\":true,\"py\":1955,\"treeBottom\":1947}"
+    },
+    {
+      "name": "采集灵木枝（键盘 E）",
+      "ok": true,
+      "detail": "trips=6 wood=8 "
+    },
+    {
+      "name": "任务1「林间苏醒」完成",
+      "ok": true,
+      "detail": "questIdx=1"
+    },
+    {
+      "name": "采集萤光蘑菇",
+      "ok": true,
+      "detail": "trips=4 glowcap=6 "
+    },
+    {
+      "name": "通过行囊 UI 制作萤火灯笼",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "灯笼扩大视野",
+      "ok": true,
+      "detail": "140 → 235"
+    },
+    {
+      "name": "任务2「第一盏微光」完成",
+      "ok": true,
+      "detail": "questIdx=2"
+    },
+    {
+      "name": "采集雾露",
+      "ok": true,
+      "detail": "trips=7 mistdew=7 "
+    },
+    {
+      "name": "制作灵木镐",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "任务3「湖畔的露水」完成",
+      "ok": true,
+      "detail": "questIdx=3"
+    },
+    {
+      "name": "制作雾露药水",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "按 Q 使用药水获得增益",
+      "ok": true,
+      "detail": "buff=24.8"
+    },
+    {
+      "name": "开采月光石",
+      "ok": true,
+      "detail": "trips=4 moonstone=6 "
+    },
+    {
+      "name": "任务4「月光矿脉」完成",
+      "ok": true,
+      "detail": "questIdx=4"
+    },
+    {
+      "name": "M 打开地图",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "迷雾随探索逐步散开",
+      "ok": true,
+      "detail": "1.1% → 16.8%"
+    },
+    {
+      "name": "制作 3 枚月光符文",
+      "ok": true,
+      "detail": "rune=3 inv={\"wood\":1,\"lantern\":1,\"pick\":1,\"rune\":3}"
+    },
+    {
+      "name": "任务5「符文之约」完成",
+      "ok": true,
+      "detail": "questIdx=5"
+    },
+    {
+      "name": "阅读古老石碑",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Esc 暂停",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "暂停时游戏时间停止",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "刷新后「继续游戏」可用",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "读档恢复背包/任务/位置",
+      "ok": true,
+      "detail": "q 5/5 rune 3/3 x 1350/1350"
+    },
+    {
+      "name": "步行抵达森林祭坛并触发发现",
+      "ok": true,
+      "detail": "{\"ok\":true,\"len\":8}"
+    },
+    {
+      "name": "献上符文进入结局演出",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "结局画面显示",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "全部任务完成",
+      "ok": true,
+      "detail": "questIdx=6"
+    },
+    {
+      "name": "结局后可继续自由漫步（迷雾已散）",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "WebAudio 音效系统已启动",
+      "ok": true,
+      "detail": "running"
+    },
+    {
+      "name": "移动端显示触屏控件",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "虚拟摇杆移动角色",
+      "ok": true,
+      "detail": "Δy=-175.0"
+    },
+    {
+      "name": "触屏按钮采集",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "移动端行囊面板可打开",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "横屏重新适配画布",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "浏览器控制台无错误/警告",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "errors": []
+}

@@ -676,7 +676,7 @@ export class Game {
       for (let i = 0; i < this.puffs.length; i += low ? 2 : 1) {
         const m = this.puffs[i];
         const dens = this.fog.densityAt(m.x, m.y);
-        const a = 0.25 + dens * 0.75;
+        const a = 0.06 + dens * 0.9;
         if (a < 0.05) continue;
         const img = this.assets.get(`mist.${m.img}`);
         g.globalAlpha = a * (1 - this.fog.globalClear);

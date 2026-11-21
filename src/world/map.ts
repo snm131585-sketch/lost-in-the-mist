@@ -144,7 +144,7 @@ export function generateMap(): WorldMap {
   // 祭坛（占 3x2 中心不可通行）
   const altarObj = place('altar', altarT.x, altarT.y, 0, true);
   altarObj.y = altarT.y * TILE + TILE / 2;
-  for (const [dx, dy] of [[-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1]]) blocked[idx(altarT.x + dx, altarT.y + dy)] = 1;
+  for (const [dx, dy] of [[-1, 0], [1, 0], [0, -1], [-1, -1], [1, -1], [0, 1]]) blocked[idx(altarT.x + dx, altarT.y + dy)] = 1;
   occupied[idx(altarT.x, altarT.y + 1)] = 1;
 
   // ----- 树木 -----
