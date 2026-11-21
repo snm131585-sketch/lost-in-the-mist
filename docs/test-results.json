@@ -1,224 +1,304 @@
 {
-  "date": "2026-11-21T04:33:33.157Z",
+  "date": "2026-11-21T15:16:53.977Z",
   "url": "file:///home/claude/lost-in-the-mist/dist/index.html",
-  "durationSec": 181,
-  "pass": 44,
-  "total": 44,
+  "durationSec": 325,
+  "pass": 60,
+  "total": 60,
   "results": [
     {
-      "name": "游戏启动并显示主菜单",
-      "ok": true,
-      "detail": "1031 ms"
-    },
-    {
-      "name": "无存档时「继续游戏」禁用",
+      "name": "启动并显示主菜单",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "所有资源点与石碑可从出生点步行到达",
+      "name": "检测到 v1 旧存档时给出不兼容提示",
       "ok": true,
-      "detail": "92/92 "
+      "detail": "检测到 v1 探索版存档：生存版玩法不同，无法沿用，将开启新的世界"
     },
     {
-      "name": "森林祭坛可步行到达",
+      "name": "所有资源点与石碑可步行到达",
       "ok": true,
-      "detail": ""
+      "detail": "263/263 "
     },
     {
-      "name": "操作说明可打开",
+      "name": "新游戏：四项生存属性满值、第 1 天白天",
       "ok": true,
-      "detail": ""
+      "detail": "{\"hp\":150,\"hunger\":149.90899999999996,\"sanity\":200,\"temp\":29.81864421003546}"
     },
     {
-      "name": "设置写入 LocalStorage",
-      "ok": true,
-      "detail": "{\"master\":80,\"music\":30,\"sfx\":80,\"touch\":\"auto\",\"fx\":\"high\"}"
-    },
-    {
-      "name": "开始游戏进入 play 状态，HUD 显示",
+      "name": "HUD 显示属性表盘、时钟与 15 格物品栏",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "方向键移动角色",
+      "name": "游戏时间持续推进",
       "ok": true,
-      "detail": "Δy=-64.0"
+      "detail": "38.7 → 39.4"
     },
     {
-      "name": "摄像机跟随角色",
+      "name": "饥饿值随时间下降",
       "ok": true,
-      "detail": "Δcam=-62.4"
+      "detail": "149.73"
     },
     {
-      "name": "碰撞：角色无法穿过树干",
+      "name": "键盘移动",
       "ok": true,
-      "detail": "{\"blocked\":true,\"py\":1955,\"treeBottom\":1947}"
+      "detail": "Δy=-44.8"
     },
     {
-      "name": "采集灵木枝（键盘 E）",
-      "ok": true,
-      "detail": "trips=6 wood=8 "
-    },
-    {
-      "name": "任务1「林间苏醒」完成",
-      "ok": true,
-      "detail": "questIdx=1"
-    },
-    {
-      "name": "采集萤光蘑菇",
-      "ok": true,
-      "detail": "trips=4 glowcap=6 "
-    },
-    {
-      "name": "通过行囊 UI 制作萤火灯笼",
+      "name": "碰撞：不能穿过树干",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "灯笼扩大视野",
+      "name": "拾取树枝（枯枝堆 / 树苗）",
       "ok": true,
-      "detail": "140 → 235"
+      "detail": "{\"ok\":true,\"trips\":6,\"have\":8}"
     },
     {
-      "name": "任务2「第一盏微光」完成",
+      "name": "采集干草",
       "ok": true,
-      "detail": "questIdx=2"
+      "detail": "{\"ok\":true,\"trips\":9,\"have\":9}"
     },
     {
-      "name": "采集雾露",
+      "name": "拾取燧石",
       "ok": true,
-      "detail": "trips=7 mistdew=7 "
+      "detail": "{\"ok\":true,\"trips\":4,\"have\":4}"
     },
     {
-      "name": "制作灵木镐",
+      "name": "旅程 1「林间苏醒」完成",
       "ok": true,
-      "detail": ""
+      "detail": "q=1"
     },
     {
-      "name": "任务3「湖畔的露水」完成",
-      "ok": true,
-      "detail": "questIdx=3"
-    },
-    {
-      "name": "制作雾露药水",
+      "name": "制作燧石斧（工具页）",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "按 Q 使用药水获得增益",
+      "name": "用斧头砍树获得木头（自动装备斧头）",
       "ok": true,
-      "detail": "buff=24.8"
+      "detail": "log=7 hand=axe"
     },
     {
-      "name": "开采月光石",
+      "name": "工具耐久随使用减少",
       "ok": true,
-      "detail": "trips=4 moonstone=6 "
+      "detail": "dur=37"
     },
     {
-      "name": "任务4「月光矿脉」完成",
+      "name": "被砍的树变成树桩、可通行、并安排重生",
       "ok": true,
-      "detail": "questIdx=4"
+      "detail": "{\"gone\":true,\"passable\":true,\"regrowIn\":1216}"
     },
     {
-      "name": "M 打开地图",
-      "ok": true,
-      "detail": ""
-    },
-    {
-      "name": "迷雾随探索逐步散开",
-      "ok": true,
-      "detail": "1.1% → 16.8%"
-    },
-    {
-      "name": "制作 3 枚月光符文",
-      "ok": true,
-      "detail": "rune=3 inv={\"wood\":1,\"lantern\":1,\"pick\":1,\"rune\":3}"
-    },
-    {
-      "name": "任务5「符文之约」完成",
-      "ok": true,
-      "detail": "questIdx=5"
-    },
-    {
-      "name": "阅读古老石碑",
+      "name": "旅程 2「燧石与木头」完成",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "Esc 暂停",
+      "name": "制作火把（照明页）",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "暂停时游戏时间停止",
+      "name": "点击物品栏装备火把（斧头回到背包）",
+      "ok": true,
+      "detail": "hand=torch"
+    },
+    {
+      "name": "火把随时间燃烧消耗",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "刷新后「继续游戏」可用",
+      "name": "进入建造模式并显示预览",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "读档恢复背包/任务/位置",
+      "name": "非法位置（树上）预览变红且无法放置",
       "ok": true,
-      "detail": "q 5/5 rune 3/3 x 1350/1350"
+      "detail": "离自己太近"
     },
     {
-      "name": "步行抵达森林祭坛并触发发现",
-      "ok": true,
-      "detail": "{\"ok\":true,\"len\":8}"
-    },
-    {
-      "name": "献上符文进入结局演出",
+      "name": "Esc 取消建造",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "结局画面显示",
+      "name": "放置篝火并扣除材料（木头 2、干草 3）",
+      "ok": true,
+      "detail": "{\"ok\":true} log 7→5 grass 7→4"
+    },
+    {
+      "name": "篝火占位阻挡通行",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "全部任务完成",
+      "name": "采摘雾莓",
       "ok": true,
-      "detail": "questIdx=6"
+      "detail": "{\"ok\":true,\"trips\":2,\"have\":3}"
     },
     {
-      "name": "结局后可继续自由漫步（迷雾已散）",
+      "name": "靠近篝火按 E 打开篝火面板",
+      "ok": true,
+      "detail": "target=struct"
+    },
+    {
+      "name": "添加树枝作为燃料",
+      "ok": true,
+      "detail": "114 → 134"
+    },
+    {
+      "name": "在篝火上烹饪雾莓",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "WebAudio 音效系统已启动",
+      "name": "[钩子] 点击物品栏吃烤雾莓恢复饥饿",
+      "ok": true,
+      "detail": "72.8"
+    },
+    {
+      "name": "制作草绳",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "放置储物箱",
+      "ok": true,
+      "detail": "{\"ok\":true}"
+    },
+    {
+      "name": "把物品放进储物箱",
+      "ok": true,
+      "detail": "stored=flint"
+    },
+    {
+      "name": "从储物箱取回物品",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[钩子] 时间加速后进入黄昏与夜晚",
+      "ok": true,
+      "detail": "day=1 phase=night"
+    },
+    {
+      "name": "夜晚篝火旁不处于黑暗中",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "夜晚无光：进入黑暗并受到雾噬伤害",
+      "ok": true,
+      "detail": "离篝火 451px，hp 150 → 122"
+    },
+    {
+      "name": "回到篝火旁：体温上升、脱离黑暗",
+      "ok": true,
+      "detail": "temp 19.3 → 26.0"
+    },
+    {
+      "name": "撑过第一夜：旅程 3「第一夜」完成",
+      "ok": true,
+      "detail": "q=3 day=2 hp=110"
+    },
+    {
+      "name": "制作燧石长矛（战斗页）",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[钩子] 生成雾狼后用长矛（F 键）击败它",
+      "ok": true,
+      "detail": "kills=1 受到伤害 18"
+    },
+    {
+      "name": "武器耐久随命中减少",
+      "ok": true,
+      "detail": "dur=117"
+    },
+    {
+      "name": "雾狼掉落生肉并可拾取",
+      "ok": true,
+      "detail": "ground=1 meat=1"
+    },
+    {
+      "name": "[钩子] 降雨：天气状态生效",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "读档恢复建筑、背包、时间、任务",
+      "ok": true,
+      "detail": "建筑 2/2 天 2/2"
+    },
+    {
+      "name": "读档后建筑仍阻挡通行",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "[钩子] 饥饿致死：显示死亡画面与死因",
+      "ok": true,
+      "detail": "你在第 2 天倒下了。死因：饥饿。"
+    },
+    {
+      "name": "死亡后存档被清除（永久死亡）",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "重新开始：新世界、建筑清空、属性满值",
+      "ok": true,
+      "detail": "{\"n\":0,\"hp\":150}"
+    },
+    {
+      "name": "重新开始后被砍的树恢复为阻挡",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "WebAudio 正常运行",
       "ok": true,
       "detail": "running"
     },
     {
-      "name": "移动端显示触屏控件",
+      "name": "移动端显示摇杆、互动、攻击按钮",
       "ok": true,
       "detail": ""
+    },
+    {
+      "name": "移动端竖屏：任务卡与按钮不重叠，物品栏在屏幕内",
+      "ok": true,
+      "detail": "bar=15..375"
     },
     {
       "name": "虚拟摇杆移动角色",
       "ok": true,
-      "detail": "Δy=-175.0"
+      "detail": "Δy=-111.0"
     },
     {
-      "name": "触屏按钮采集",
+      "name": "触屏「互动」按钮采集",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "移动端行囊面板可打开",
+      "name": "移动端制作面板可打开",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "横屏重新适配画布",
+      "name": "横屏：物品栏在屏幕内",
       "ok": true,
-      "detail": ""
+      "detail": "{\"x\":220.5,\"y\":290,\"width\":403,\"height\":94}"
+    },
+    {
+      "name": "单帧更新+渲染耗时（1366×768）",
+      "ok": true,
+      "detail": "中位数 2.7 ms，P95 4.9 ms"
     },
     {
       "name": "浏览器控制台无错误/警告",

@@ -77,6 +77,7 @@ export class Game {
   private spawnT = { rabbit: 0, wolf: 30, whisper: 0 };
   private gid = 1;
   private lastPhase: Phase = 'day';
+  private lastDay = 1;
   rnd = mulberry32(99);
 
   constructor() {
@@ -272,6 +273,7 @@ export class Game {
       this.ui.hide('menu'); this.ui.show('hud');
       this.updateTouchVisibility();
       this.lastPhase = phaseOf(this.state.time);
+      this.lastDay = dayOf(this.state.time);
       this.updateWorld(0);
       this.fog.reveal(this.player.x, this.player.y - 8, this.visionRadius());
       this.refreshHud();
@@ -409,8 +411,13 @@ export class Game {
     if (ph !== this.lastPhase) {
       if (ph === 'dusk') this.ui.toast('黄昏降临，天快黑了', { big: true });
       if (ph === 'night') this.ui.toast('夜晚 · 待在光亮里', { big: true, warn: true });
-      if (ph === 'dawn') { this.ui.toast(`第 ${this.day()} 天 · 黎明`, { big: true }); this.checkQuests(); }
+      if (ph === 'dawn') this.ui.toast('黎明 · 黑夜就要过去了', { big: true });
       this.lastPhase = ph;
+    }
+    if (this.day() !== this.lastDay) {
+      this.lastDay = this.day();
+      this.ui.toast(`第 ${this.lastDay} 天`, { big: true });
+      this.checkQuests();
     }
     for (const st of s.structures) {
       if (st.type !== 'campfire' || !st.fuel) continue;
@@ -571,16 +578,19 @@ export class Game {
     if (!s.altarFound && ad < 270) { s.altarFound = true; this.ui.toast('发现：森林祭坛', { big: true }); this.audio.play('discover'); this.checkQuests(); }
 
     let best: Game['target'] = null; let bd = 46;
+    // 面朝方向的目标优先（键盘 / 触屏玩家无法用鼠标点选具体物件）
+    const f = p.dir === 'side' ? { x: p.flip ? -1 : 1, y: 0 } : p.dir === 'up' ? { x: 0, y: -1 } : { x: 0, y: 1 };
+    const facing = (x: number, y: number) => { const dx = x - fx, dy = y - fy, l = Math.hypot(dx, dy) || 1; return ((dx * f.x + dy * f.y) / l) * 10; };
     if (!this.build) {
       for (const o of this.harvestables) {
         if (Math.abs(o.x - fx) > 60 || Math.abs(o.y - fy) > 60) continue;
         const big = o.kind === 'tree' || o.kind === 'pine' || o.kind === 'rock';
         const tool = NODES[this.nodeType(o)!].tool;
-        const d = Math.hypot(o.x - fx, o.y - (big ? 0 : 6) - fy) - (big ? 6 : 0) + (tool && this.findTool(tool) === null ? 18 : 0);
+        const d = Math.hypot(o.x - fx, o.y - (big ? 0 : 6) - fy) - (big ? 6 : 0) + (tool && this.findTool(tool) === null ? 18 : 0) - facing(o.x, o.y);
         if (d < bd && !this.nodeGone(o)) { bd = d; best = { kind: 'node', obj: o }; }
       }
       for (const o of this.steles) { const d = Math.hypot(o.x - fx, o.y - fy); if (d < bd + 4) { bd = d; best = { kind: 'stele', obj: o }; } }
-      for (const st of s.structures) { const d = Math.hypot(st.x - fx, st.y - fy) - 8; if (d < bd + 6) { bd = d; best = { kind: 'struct', st }; } }
+      for (const st of s.structures) { const d = Math.hypot(st.x - fx, st.y - fy) - 16 - facing(st.x, st.y); if (d < bd + 6) { bd = d; best = { kind: 'struct', st }; } }
       if (ad < 92) best = { kind: 'altar', obj: this.altarObj };
     }
     this.target = best;
@@ -971,7 +981,7 @@ export class Game {
     this.ui.setTouchPotion(countIn(s.inv, 'tonic'));
     this.ui.fx(s.stats.sanity, s.stats.temp, this.hurtFlash, s.stats.hunger);
     this.renderer.drawMinimap();
-    if (this.ui.isOpen('bag')) this.ui.renderCraft(s);
+    if (this.ui.isOpen('bag')) this.ui.renderCraft(s, false);
   }
 
   // ================= 结局 =================

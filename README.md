@@ -1,23 +1,24 @@
 # Lost in the Mist · 迷雾拾荒者
 
-一款 2D 俯视角幻想森林探索网页游戏。你在浓雾里醒来，要拾取材料、点亮灯笼驱散迷雾、制作月光符文，最后唤醒北方的森林祭坛。
+一款 2D 俯视角**开放世界生存**网页游戏。你在被迷雾笼罩的森林里醒来，要采集、制作、建造篝火熬过黑夜、和雾狼战斗，并最终唤醒北方的森林祭坛。
 
-- **在线试玩（私有页面，分享与否由你决定）**：https://claude.ai/artifact/MpehKVTfVBfTEVy8Y9jK6T
-- 首次通关大约需要 15–25 分钟。支持桌面键盘和手机触屏，进度自动保存在浏览器里。
+> **v2 生存版**（当前分支 `survival-upgrade`）：生命、饥饿、精神、体温四项属性；昼夜循环和夜间黑暗；工具耐久；建造篝火与储物箱；烹饪；生物与战斗；降雨；永久死亡。
+> **v1 探索版**保留在标签 `v1.0-explore`，线上地址 https://snm131585-sketch.github.io/lost-in-the-mist/ 目前仍是 v1。
 
-## 功能
-主菜单（新游戏 / 继续 / 操作说明 / 设置）· 96×72 格的森林地图 · 角色行走动画（三个方向，各 6 帧）· 键盘和浮动虚拟摇杆 · 摄像机平滑跟随 · 瓦片碰撞 · 迷雾探索（带小地图和大地图）· 4 种资源 · 背包 · 4 种制作配方 · 6 个连续任务 · 森林祭坛与结局演出 · 暂停和设置（音量、触屏控件、特效档位）· 自动存档 · WebAudio 合成的音效和生成式环境音乐 · 5 块剧情石碑
+玩法和数值见 [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md)，架构和升级日志见 [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)，测试结果见 [docs/TEST_REPORT.md](docs/TEST_REPORT.md)，美术规范见 [docs/ART_GUIDE.md](docs/ART_GUIDE.md)。
 
-详细玩法见 [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md)，美术规范见 [docs/ART_GUIDE.md](docs/ART_GUIDE.md)，测试结果见 [docs/TEST_REPORT.md](docs/TEST_REPORT.md)。
+## 操作
+WASD / 方向键移动，E 互动，F 或鼠标左键攻击，1–0 使用物品栏，C 打开制作，M 打开地图，Q 喝药水，Esc 暂停。
+手机上：左下是摇杆，右下是「互动」「攻击」「药」按钮，点物品栏可以使用物品。
 
 ## 技术栈（以及和原定方案的差异）
 | 原定 | 实际 | 原因 |
 |---|---|---|
-| Phaser | 自研轻量 Canvas 2D 引擎（`src/engine`、`src/game/game.ts`） | 开发环境的网络策略拒绝访问 npm 仓库（403），Phaser 装不上 |
+| Phaser | 自研轻量 Canvas 2D 引擎（`src/engine`、`src/game/`） | 开发环境的网络策略拒绝访问 npm 仓库（403），Phaser 装不上 |
 | Vite | 开发环境里用 esbuild 构建（`scripts/build.mjs`）；`vite.config.ts` 和 `npm run dev` 也已配好 | 原因同上。Vite 配置没有在开发环境里实际运行过 |
 | TypeScript / HTML / CSS / LocalStorage / Git | 都已使用 | — |
 
-游戏逻辑（`src/game/data.ts` 和 `state.ts`：物品、配方、任务、存档）不依赖任何引擎，以后迁移到 Phaser 时可以直接复用。
+配置表（`src/data/`）和纯逻辑系统（`src/systems/`、`src/game/state.ts`）不依赖任何引擎，以后迁移到 Phaser 时可以直接复用。
 
 ## 本地运行
 需要 Node.js 18 或更高版本。
@@ -31,7 +32,7 @@ npm run build      # 输出到 dist/
 
 **方式 B：不安装依赖，构建单文件版本**（需要能找到 esbuild，可以全局安装，也可以设置 `ESBUILD_PATH`）
 ```bash
-node scripts/build.mjs   # 生成 dist/index.html（约 107 KB，所有资源都内联在里面）
+node scripts/build.mjs   # 生成 dist/index.html（约 180 KB，所有资源都内联在里面）
 # 直接双击打开 dist/index.html 就能玩，不需要服务器
 ```
 
@@ -50,17 +51,17 @@ npm run test:e2e
 
 ## 目录结构
 ```
-index.html            页面结构（菜单、HUD、面板）
+index.html            页面结构
 src/styles.css        UI 样式
-src/main.ts           入口
-src/engine/           math · input · audio
-src/art/              painters（程序化美术）· manifest（资源表，可替换为正式 PNG）
-src/world/            map（地图生成、碰撞）· ground（地面烘焙）· fog（迷雾）
-src/game/             data · state · game（主循环和渲染）
-src/ui/               ui（DOM 界面）
-scripts/build.mjs     单文件构建
-tests/e2e.mjs         完整通关的端到端测试
-docs/                 设计文档、美术规范、测试报告
+src/data/             配置表：物品、资源节点、建筑、生物、配方、旅程
+src/systems/          纯逻辑：背包、生存、时间、天气、生物、建造
+src/game/             state（存档与制作）· game（主控）· render（渲染）
+src/world/            地图生成、地面烘焙、迷雾
+src/art/              程序化美术与资源替换接口
+src/engine/           数学、输入、音频
+src/ui/               DOM 界面
+tests/e2e.mjs         v2 端到端测试（60 项）
+docs/                 设计、开发、美术、测试文档
 ```
 
 ## 美术说明

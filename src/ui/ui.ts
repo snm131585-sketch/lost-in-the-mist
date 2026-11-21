@@ -203,7 +203,9 @@ export class UI {
     return `<div class="hb" ${attrs} title="${d.name}">${key ? `<span class="key">${key}</span>` : ''}<img src="${this.assets.icons.get(sl.id)}" alt="${d.name}"/>${cnt}${dur}</div>`;
   }
   updateBar(s: SaveData) {
-    const key = JSON.stringify([s.inv, s.equip]);
+    // 耐久按整百分比计入 key：燃烧中的火把不会每帧重建物品栏（否则点击会落空）
+    const k = (sl: Slot | null) => (sl ? `${sl.id}:${sl.n}:${sl.dur !== undefined ? Math.ceil((sl.dur / (ITEMS[sl.id].durability ?? 1)) * 100) : ''}` : '-');
+    const key = s.inv.map(k).join('|') + '#' + k(s.equip.hand) + k(s.equip.body);
     if (key === this.barKey) return;
     this.barKey = key;
     $('hotbar').innerHTML = s.inv.map((sl, i) => this.slotHtml(sl, `data-slot="${i}"`, i < 10 ? String((i + 1) % 10) : undefined)).join('');
@@ -218,7 +220,11 @@ export class UI {
   }
 
   // ---------- 制作 ----------
-  renderCraft(s: SaveData) {
+  private craftKey = '';
+  renderCraft(s: SaveData, force = true) {
+    const key = this.tab + JSON.stringify(s.inv);
+    if (!force && key === this.craftKey) return;
+    this.craftKey = key;
     $('craft-tabs').innerHTML = TABS.map((t) => `<button class="tab${t.id === this.tab ? ' on' : ''}" data-tab="${t.id}">${t.name}</button>`).join('');
     $('craft-tabs').querySelectorAll<HTMLElement>('[data-tab]').forEach((b) => b.addEventListener('click', () => { this.tab = b.dataset.tab as RecipeTab; this.renderCraft(s); }));
     const rec = $('recipes');

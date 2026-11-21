@@ -338,3 +338,6 @@ body.touch-on #build-bar { bottom: calc(200px + var(--safe-b)); }
   #hotbar .hb img, .eq img { width: 26px; height: 26px; }
   #hotbar .hb .key { display: none; }
 }
+/* 提示在窄屏上自动换行，不溢出屏幕 */
+.toast { max-width: calc(100vw - 24px); white-space: normal; text-align: center; line-height: 1.5; }
+@media (max-width: 680px) { .toast.big { font-size: 15px; letter-spacing: .08em; padding: 10px 18px; } }

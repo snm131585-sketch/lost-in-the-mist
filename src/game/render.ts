@@ -42,7 +42,9 @@ export class Renderer {
     this.flySprite = c;
   }
 
-  resize() { this.light.width = this.game.canvas.width; this.light.height = this.game.canvas.height; }
+  /** 光照层用半分辨率绘制（柔和渐变，放大后看不出差别，填充开销降为 1/4） */
+  private LS = 0.5;
+  resize() { this.light.width = Math.ceil(this.game.canvas.width * this.LS); this.light.height = Math.ceil(this.game.canvas.height * this.LS); }
 
   screenToWorld(sx: number, sy: number) {
     const g = this.game;
@@ -177,7 +179,8 @@ export class Renderer {
     g.setTransform(1, 0, 0, 1, 0, 0);
     if (inPlay && s.weather.rain > 0.02) this.drawRain(g, s.weather.rain);
     this.drawLighting(left, top);
-    g.drawImage(this.light, 0, 0);
+    g.imageSmoothingEnabled = true;
+    g.drawImage(this.light, 0, 0, game.canvas.width, game.canvas.height);
     if (inPlay) {
       const [tr, tg, tb, ta] = tintOf(s.time);
       if (ta > 0) { g.fillStyle = `rgba(${tr},${tg},${tb},${ta})`; g.fillRect(0, 0, game.canvas.width, game.canvas.height); }
@@ -503,7 +506,7 @@ export class Renderer {
     const game = this.game;
     const l = this.lg;
     const W = this.light.width, H = this.light.height;
-    const z = game.zoom * game.dpr;
+    const z = game.zoom * game.dpr * this.LS;
     l.setTransform(1, 0, 0, 1, 0, 0);
     l.globalCompositeOperation = 'source-over';
     l.clearRect(0, 0, W, H);
